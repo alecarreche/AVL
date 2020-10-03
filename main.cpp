@@ -1,5 +1,5 @@
 #include <iostream>
-#include <sstream>
+#include <stdexcept>
 #include <vector>
 using namespace std;
 
@@ -48,7 +48,7 @@ AVL::Student* AVL::insert(Student* node, long ID, string name) {
     if(!node) {
         return new Student(ID, name);
     } else if(ID == node->ID) {
-        return nullptr;
+        throw invalid_argument("");
     } else if(ID < node->ID) {
         node->left = insert(node->left, ID, name);
     } else {
@@ -81,7 +81,15 @@ void AVL::removeID(Student* node, long ID) {
 }
 
 AVL::Student* AVL::searchID(Student* node, long ID) {
+    if(!node)
+        throw invalid_argument("");
 
+    if(ID == node->ID)
+        return node;
+    else if(ID < node->ID)
+        return searchID(node->left, ID);
+    else
+        return searchID(node->right, ID);
 }
 
 void AVL::searchName(Student* node, string name) {
@@ -155,6 +163,19 @@ int main() {
     root = test.insert(root, 4, "four");
     root = test.insert(root, 7, "seven");
     root = test.insert(root, 2, "two");
+
+    try {
+        root = test.insert(root, 11, "two");
+    } catch (invalid_argument e){
+        cout << "already in tree" << endl;
+    }
+
+
+    try {
+        AVL::Student *search = test.searchID(root, 1);
+    } catch (invalid_argument e){
+        cout << "not found in tree";
+    }
 
 
 
