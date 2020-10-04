@@ -25,16 +25,18 @@ public:
 
     // User functions
     Student* insert(Student* node, long ID, string name);
-    void removeID(Student* node, long ID);
+    Student* removeID(Student* node, long ID);
     Student* searchID(Student* node, long ID);
-    void searchName(Student* node, string name);
-    void printInOrder();
-    void printPostOrder();
-    void printLevelCount();
-    void removeInOrder(int N);
+    string searchName(Student* node, string name);
+    string printInOrder(Student* node);
+    string printPostOrder(Student* node);
+    int printLevelCount(Student* node);
+    void removeInOrder(Student* node, int N);
 
     // Helper functions
     int getHeight(Student* node);
+    Student* findSuccessor(Student* node);
+    vector<Student*> inOrderVector(Student* node, vector<Student*> list);
 
     // Rotations
     Student* rotateLeft(Student* node);
@@ -76,7 +78,25 @@ AVL::Student* AVL::insert(Student* node, long ID, string name) {
     return node;
 }
 
-void AVL::removeID(Student* node, long ID) {
+AVL::Student* AVL::removeID(Student* node, long ID) {
+    if(!node)
+        throw invalid_argument("");
+
+    if(ID == node->ID) {
+        if(node->right) {
+            Student *replacementNode = findSuccessor(node);
+            replacementNode->left = node->left;
+            replacementNode->right = node->right;
+            node = replacementNode;
+        } else {
+            node = node->left;
+        }
+    } else if(ID < node->ID)
+        node->left = removeID(node->left, ID);
+    else
+        node->right = removeID(node->right, ID);
+
+    return node;
 
 }
 
@@ -92,23 +112,53 @@ AVL::Student* AVL::searchID(Student* node, long ID) {
         return searchID(node->right, ID);
 }
 
-void AVL::searchName(Student* node, string name) {
+string AVL::searchName(Student* node, string name) {
+    string result = "";
+    if(node) {
+        if(node->name == name)
+            result += to_string(node->ID) + '\n';
+
+        result += searchName(node->left, name);
+        result += searchName(node->right, name);
+    }
+
+    return result;
 
 }
 
-void AVL::printInOrder() {
+string AVL::printInOrder(Student* node) {
+    string result = "";
+    if(node) {
+        result += printInOrder(node->left);
+        result += node->name + ", ";
+        result += printInOrder(node->right);
+    }
+
+    return result;
 
 }
 
-void AVL::printPostOrder() {
+string AVL::printPostOrder(Student* node) {
+    string result = "";
+    if(node) {
+        result += printPostOrder(node->left);
+        result += printPostOrder(node->right);
+        result += node->name + ", ";
+    }
 
+    return result;
 }
 
-void AVL::printLevelCount() {
-
+int AVL::printLevelCount(Student* node) {
+    return getHeight(node);
 }
 
-void AVL::removeInOrder(int N) {
+void AVL::removeInOrder(Student* node, int N) {
+    vector<Student*> flattened;
+    flattened = inOrderVector(node, flattened);
+    if(N >= flattened.size())
+        throw invalid_argument("");
+    else removeID(node, flattened[N]->ID);
 
 }
 
@@ -123,6 +173,28 @@ int AVL::getHeight(Student* node) {
     rightHeight += getHeight(node->right);
 
     return max(leftHeight, rightHeight);
+}
+
+AVL::Student* AVL::findSuccessor(Student* node) {
+    Student* successor = nullptr;
+    if(node->left && node->left->left)
+        findSuccessor(node->left);
+    else {
+        successor = node->left;
+        node->left = successor->right;
+    }
+
+    return successor;
+}
+
+vector<AVL::Student*> AVL::inOrderVector(Student* node, vector<Student*> list) {
+    if(node) {
+        list = inOrderVector(node->left, list);
+        list.push_back(node);
+        list = inOrderVector(node->right, list);
+    }
+
+    return list;
 }
 
 AVL::Student* AVL::rotateLeft(Student* node) {
@@ -174,8 +246,40 @@ int main() {
     try {
         AVL::Student *search = test.searchID(root, 1);
     } catch (invalid_argument e){
-        cout << "not found in tree";
+        cout << "not found in tree" << endl;
     }
+
+    string inorder = test.printInOrder(root);
+    cout << inorder.substr(0, inorder.size() - 2) << endl;
+
+    string postorder = test.printPostOrder(root);
+    cout << postorder.substr(0, postorder.size() - 2) << endl;
+
+    string searchName = test.searchName(root, "seven");
+    cout << searchName.substr(0, searchName.size() - 1) << endl;
+
+    root = test.insert(root, 77, "seven");
+
+    string searchName2 = test.searchName(root, "seven");
+    cout << searchName2.substr(0, searchName2.size() - 1) << endl;
+
+    root = test.removeID(root, 77);
+    string inorder2 = test.printInOrder(root);
+    cout << inorder2.substr(0, inorder2.size() - 2) << endl;
+
+    int removeIdx = 0;
+    test.removeInOrder(root, removeIdx);
+    string inorder3 = test.printInOrder(root);
+    cout << inorder3.substr(0, inorder3.size() - 2) << endl;
+
+
+    /*vector<AVL::Student*> testVector;
+    testVector = test.inOrderVector(root, testVector);
+    for (auto x : testVector)
+        cout << x->ID << " ";*/
+
+    cout << "done" << endl;
+
 
 
 
