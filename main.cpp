@@ -29,6 +29,7 @@ public:
     Student* searchID(Student* node, long ID);
     string searchName(Student* node, string name);
     string printInOrder(Student* node);
+    string printPreOrder(Student* node);
     string printPostOrder(Student* node);
     int printLevelCount(Student* node);
     void removeInOrder(Student* node, int N);
@@ -37,6 +38,7 @@ public:
     int getHeight(Student* node);
     Student* findSuccessor(Student* node);
     vector<Student*> inOrderVector(Student* node, vector<Student*> list);
+    void verifyParams(string command, string params);
 
     // Rotations
     Student* rotateLeft(Student* node);
@@ -59,19 +61,19 @@ AVL::Student* AVL::insert(Student* node, long ID, string name) {
 
     node->balance = getHeight(node->left) - getHeight(node->right);
 
-    // left left
+    // left left case
     if(node->balance > 1 && ID < node->left->ID)
         node = rotateRight(node);
 
-    // right right
+    // right right case
     else if(node->balance < -1 && node->right->ID)
         node = rotateLeft(node);
 
-    // left right
+    // left right case
     else if(node->balance > 1 && ID > node->right->ID)
         node = rotateLeftRight(node);
 
-    // right left
+    // right left case
     else if(node->balance < -1 && ID < node->left->ID)
         node = rotateRightLeft(node);
 
@@ -138,6 +140,18 @@ string AVL::printInOrder(Student* node) {
 
 }
 
+string AVL::printPreOrder(Student* node) {
+    string result = "";
+    if(node) {
+        result += node->name + ", ";
+        result += printPreOrder(node->left);
+        result += printPreOrder(node->right);
+    }
+
+    return result;
+
+}
+
 string AVL::printPostOrder(Student* node) {
     string result = "";
     if(node) {
@@ -179,7 +193,10 @@ AVL::Student* AVL::findSuccessor(Student* node) {
     Student* successor = nullptr;
     if(node->left && node->left->left)
         findSuccessor(node->left);
-    else {
+    else if(node->right && !node->left) {
+        successor = node->right;
+        node->right = successor->right;
+    } else {
         successor = node->left;
         node->left = successor->right;
     }
@@ -195,6 +212,35 @@ vector<AVL::Student*> AVL::inOrderVector(Student* node, vector<Student*> list) {
     }
 
     return list;
+}
+
+void AVL::verifyParams(string command, string params) {
+    string openQuote = "“";
+    string closeQuote = "”";
+
+    if(command == "insert") {
+        string ID = params.substr(params.size() - 8, 8);
+        for(auto c : ID) {
+            if(isspace(c))
+                throw invalid_argument("");
+        }
+
+        string name = params.substr(0, params.size()- 9);
+        //if(name.substr(0, 3) != openQuote || name.substr(name.size()-3, 3) != closeQuote)
+        if(name[0] != '\"' || name[name.size()-1] != '\"')
+            throw invalid_argument("");
+    } else if(command == "remove" || command == "searchID") {
+        if(params.size() != 8)
+            throw invalid_argument("");
+        for(auto c : params) {
+            if(isspace(c))
+                throw invalid_argument("");
+        }
+    } else { // searchName case
+        //if(params.substr(0, 3) != openQuote || params.substr(params.size()-3, 3) != closeQuote)
+        if(params[0] != '\"' || params[params.size()-1] != '\"')
+            throw invalid_argument("");
+    }
 }
 
 AVL::Student* AVL::rotateLeft(Student* node) {
@@ -224,7 +270,8 @@ AVL::Student* AVL::rotateRightLeft(Student* node) {
 }
 
 int main() {
-    AVL test;
+
+/*    AVL test;
     AVL::Student* root = nullptr;
     root = test.insert(root, 12, "twelve");
     root = test.insert(root, 8, "eight");
@@ -273,19 +320,17 @@ int main() {
     cout << inorder3.substr(0, inorder3.size() - 2) << endl;
 
 
-    /*vector<AVL::Student*> testVector;
+    vector<AVL::Student*> testVector;
     testVector = test.inOrderVector(root, testVector);
     for (auto x : testVector)
-        cout << x->ID << " ";*/
+        cout << x->ID << " ";
 
-    cout << "done" << endl;
-
-
-
-
-
-
-    /*cout << "how many commands? "; // remove before submit
+    cout << "done" << endl;*/
+    string openQuote = "“";
+    string closeQuote = "”";
+    AVL tree;
+    AVL::Student *treeRoot = 0;
+    cout << "how many commands? "; // remove before submit
     unsigned long numCommands;
     cin >> numCommands;
     cin.ignore(10000, '\n'); // resets cin
@@ -298,39 +343,90 @@ int main() {
         getline(cin, userInput);
         int spacePos = userInput.find(" ");
         string command = userInput.substr(0, spacePos);
+        string params = userInput.substr(spacePos + 1);
 
-        cout << command << endl; // remove before submit
+        //cout << command << endl; // remove before submit
 
         if(command == "insert") {
-            // insert value into temporary node
-            // if temp node
-            //    print success
-            //    root = temp
-            // else
-            //     print unsuccess
+            try {
+                tree.verifyParams("insert", params);
+                string ID = params.substr(params.size() - 8, 8);
+                string name = params.substr(0, params.size()- 9);
+                long longID = stol(ID);
+//                string nameNoQuote = name.substr(3, name.size()-
+                string nameNoQuote = name.substr(1, name.size()-2);
+                treeRoot = tree.insert(treeRoot, longID, nameNoQuote);
+                cout << "successful" << endl;
+            } catch(invalid_argument e) {
+                cout << "unsuccessful" << endl;
+            }
         } else if(command == "remove") {
-
+            try {
+                tree.verifyParams("remove", params);
+                long longID = stol(params);
+                treeRoot = tree.removeID(treeRoot, longID);
+                cout << "successful" << endl;
+            } catch(invalid_argument e) {
+                cout << "unsuccessful" << endl;
+            }
         } else if(command == "search") {
+            bool searchID = true;
+            long longID;
+            try {
+                longID = stol(params);
+            } catch(invalid_argument e) {
+                searchID = false;
+            }
+
+            if(searchID) {
+                try {
+                    tree.verifyParams("searchID", params);
+                    AVL::Student* result = tree.searchID(treeRoot, longID);
+                    cout << result->name << endl;
+                } catch (invalid_argument e) {
+                    cout << "unsuccessful" << endl;
+                }
+            } else {
+                try {
+                    tree.verifyParams("searchName", params);
+                    string nameNoQuote = params.substr(1, params.size()-2);
+                    string result = tree.searchName(treeRoot, nameNoQuote);
+                    if(result == "")
+                        cout << "unsuccessful" << endl;
+                    else
+                        cout << result.substr(0, result.size() - 1) << endl;
+                } catch(invalid_argument e) {
+                    cout << "unsuccessful" << endl;
+                }
+            }
 
         } else if(command == "printInorder") {
-
+            string inorder = tree.printInOrder(treeRoot);
+            cout << inorder.substr(0, inorder.size() - 2) << endl;
         } else if(command == "printPreorder") {
-
+            string preorder = tree.printPreOrder(treeRoot);
+            cout << preorder.substr(0, preorder.size() - 2) << endl;
         } else if(command == "printPostorder") {
-
+            string postorder = tree.printPostOrder(treeRoot);
+            cout << postorder.substr(0, postorder.size() - 2) << endl;
         } else if(command == "printLevelCount") {
-
+            cout << tree.printLevelCount(treeRoot) << endl;
         } else if(command == "removeInorder") {
-
+            try {
+                int N = stoi(params);
+                tree.removeInOrder(treeRoot, N);
+            } catch(invalid_argument e) {
+                cout << "unsuccessful" << endl;
+            }
         }
-
+/*
         string params = userInput.substr(spacePos + 1);
         int spacePos2 = params.find(" ");
         string param1 = params.substr(0, spacePos2);
         cout << userInput << endl;
         cout << command << endl;
-        cout << param1 << endl;
-    }*/
+        cout << param1 << endl;*/
+    }
 
 
     /*string user_input;
