@@ -84,7 +84,7 @@ In normal binary search tree removal, the best case complexity is constant, with
 ```c++
     string searchName(Student *node, string name)
 ```
-Unlike `searchID`, `searchName` does not enjoy the benefits of a binary search tree, and there can be multiple matches to the same input, so we must always traverse the entire tree. Therefore, for **l** representing the length of the string, and **n** number of nodes, we obtain a complexity of **O(nl)** in all cases.
+Unlike `searchID`, `searchName` does not enjoy the benefits of a binary search tree, and there can be multiple matches to the same input, so we must always traverse the entire tree. Therefore, for **n** number of nodes, we obtain a complexity of **O(n)** in all cases.
 
 ```c++
     string printInOrder(Student *node)
