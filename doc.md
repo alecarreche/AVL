@@ -41,7 +41,7 @@ In the *best case*, this function will find the successor on its first call, res
 ```c++
     vector<Student *> inOrderVector(Student *node, vector<Student *> list)
 ```
-When the tree is empty, we obtain the best case of **O(1)**. Otherwise, this function traverses the entire tree, so average and wosrt complexities are **O(n)**, where **n** is the number of nodes in the tree.
+This function traverses the entire tree, so in all cases complexity is **O(n)**, where **n** is the number of nodes in the tree.
 
 ```c++
     void verifyParams(string command, string params)
@@ -83,23 +83,20 @@ In normal binary search tree removal, the best case complexity is constant, with
 ```c++
     string searchName(Student *node, string name)
 ```
-When the input node is `null`, this function we obtain best case complexity of **O(1)**. Unlike `searchID`, `searchName` does not enjoy the benefits of a binary search tree, and there can be multiple matches to the same input, so we must always traverse the entire tree. Therefore, for **l** representing the length of the string, and **n** number of nodes, we obtain a complexity of **O(nl)**.
+Unlike `searchID`, `searchName` does not enjoy the benefits of a binary search tree, and there can be multiple matches to the same input, so we must always traverse the entire tree. Therefore, for **l** representing the length of the string, and **n** number of nodes, we obtain a complexity of **O(nl)** in all cases.
 
 ```c++
     string printInOrder(Student *node)
 ```
-When the input node is `null`, this function we obtain best case complexity of **O(1)**. In all other cases, this function traverses the entire tree and performs string appends. Therefore, the average and worst time complexities are **O(n)**, for **n** nodes in the tree.
-
+This function traverses the entire tree, so in all cases complexity is **O(n)**, where **n** is the number of nodes in the tree.
 ```c++
     string printPreOrder(Student *node)
 ```
-When the input node is `null`, this function we obtain best case complexity of **O(1)**. In all other cases, this function traverses the entire tree and performs string appends. Therefore, the average and worst time complexities are **O(n)**, for **n** nodes in the tree.
-
+This function traverses the entire tree, so in all cases complexity is **O(n)**, where **n** is the number of nodes in the tree.
 ```c++
     string printPostOrder(Student *node)
 ```
-When the input node is `null`, this function we obtain best case complexity of **O(1)**. In all other cases, this function traverses the entire tree and performs string appends. Therefore, the average and worst time complexities are **O(n)**, for **n** nodes in the tree.
-
+This function traverses the entire tree, so in all cases complexity is **O(n)**, where **n** is the number of nodes in the tree.
 ```c++
     int printLevelCount(Student *node)
 ```
@@ -108,9 +105,9 @@ This function calls `getHeight` on the root, which results in the worst case com
 ```c++
     void removeInOrder(Student *node, int N)
 ```
-This function calls `inOrderVector` every time. When `N` is out of range, the function throws an exception, so the best case is constant time; otherwise, `removeID` is called. On average, we assume `N` will be in range and hence, the tree will be nonempty. For **n** = nodes in tree and **h** = height of tree, we obtain a complexity of **O(n + h^2)**. But since **h** is roughly equal to **log(n)**, we have **O(n + (log(n))^2)**. Since **O((log(n))^2)** is slower than **O(n)**, we can reach these final complexities.
+This function calls `inOrderVector` every time, which is linear complexity. When `N` is out of range, the function throws an exception, so the best case is linear time; otherwise, `removeID` is called. On average, we assume `N` will be in range and hence, the tree will be nonempty. For **n** = nodes in tree and **h** = height of tree, we obtain a complexity of **O(n + h^2)**. But since **h** is roughly equal to **log(n)**, we have **O(n + (log(n))^2)**. Since **O((log(n))^2)** is slower than **O(n)**, we can reach these final complexities.
 
-- Best Case: **O(1)**
+- Best Case: **O(n)**
 - Worst Case: **O((log(n))^2)**
 - Average Case: **O((log(n))^2)**
 
