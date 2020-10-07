@@ -238,8 +238,6 @@ vector<AVL::Student *> AVL::inOrderVector(Student *node, vector<Student *> list)
 // Verifies that user input is properly formatted. Throws invalid_argument if
 // user input is invalid.
 void AVL::verifyParams(string command, string params) {
-    string openQuote = "“";
-    string closeQuote = "”";
 
     if (command == "insert") {
         string ID = params.substr(params.size() - 8, 8);
