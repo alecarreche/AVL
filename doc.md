@@ -2,8 +2,12 @@
 Alec Arreche
 
 ### Part 1: Complexity of functions
+*Important notes:*
+- Since our AVL tree is nearly balanced, the height of the tree, **h** is roughly **log(n)**, where **n** is the number of nodes.
+- Assume the complexity of `+` operator for strings is constant.
 
 **Helper Functions**
+
 ```c++
     Student *rotateLeft(Student *node)
 ```
@@ -21,6 +25,7 @@ In all cases, this function is **O(1)**.
 ```c++
     Student *rotateRightLeft(Student *node)
 ```
+
 In all cases, this function is **O(1)**.
 
 ```c++
@@ -36,7 +41,7 @@ In the *best case*, this function will find the successor on its first call, res
 ```c++
     vector<Student *> inOrderVector(Student *node, vector<Student *> list)
 ```
-This function traverses the entire tree in all cases, so it is always **O(n)**, where **n** is the number of nodes in the tree.
+When the tree is empty, we obtain the best case of **O(1)**. Otherwise, this function traverses the entire tree, so average and wosrt complexities are **O(n)**, where **n** is the number of nodes in the tree.
 
 ```c++
     void verifyParams(string command, string params)
@@ -51,38 +56,63 @@ For this function, let **c** represent the number of characters in `command`, an
 ```c++
     Student *insert(Student *node, long ID, string name)
 ```
+Consider the complexity of normal binary search tree insertion. The best case complexity is **O(1)**, and worst and average case complexities are **O(h)**, where **h** represents the height of the tree. We can ignore the rotations in our `insert` since these are constant complexity. However,  when `node` is not null, our `insert` also calls `getHeight`, which we have shown has a complexity of **O(h)** in all cases, resulting in total complexity as:
+
+- Best Case: **O(1)**
+- Worst Case: **O(h^2)**
+- Average Case: **O(h^2)**
 
 ```c++
     Student *removeID(Student *node, long ID)
 ```
+In normal binary search tree removal, the best case complexity is constant, with average and worst being **O(h)**, where **h** is the height of the tree. However, `removeID` calls `findSuccessor`, which has a best case **O(1)** complexity and worst and averge case **O(h)** complexity. Since we are unable to prove we will obtain the best case for `findSuccessor` on average, we obtain the following complexities:
+
+- Best Case: **O(1)**
+- Worst Case: **O(h^2)**
+- Average Case: **O(h^2)**
 
 ```c++
     Student *searchID(Student *node, long ID)
 ```
+`searchID` is no different from binary search tree search. Therefore for **h** representing height of tree, we have:
+
+- Best Case: **O(1)**
+- Worst Case: **O(h)**
+- Average Case: **O(h)**
 
 ```c++
     string searchName(Student *node, string name)
 ```
+When the input node is `null`, this function we obtain best case complexity of **O(1)**. Unlike `searchID`, `searchName` does not enjoy the benefits of a binary search tree, and there can be multiple matches to the same input, so we must always traverse the entire tree. Therefore, for **l** representing the length of the string, and **n** number of nodes, we obtain a complexity of **O(nl)**.
 
 ```c++
     string printInOrder(Student *node)
 ```
+When the input node is `null`, this function we obtain best case complexity of **O(1)**. In all other cases, this function traverses the entire tree and performs string appends. Therefore, the average and worst time complexities are **O(n)**, for **n** nodes in the tree.
 
 ```c++
     string printPreOrder(Student *node)
 ```
+When the input node is `null`, this function we obtain best case complexity of **O(1)**. In all other cases, this function traverses the entire tree and performs string appends. Therefore, the average and worst time complexities are **O(n)**, for **n** nodes in the tree.
 
 ```c++
     string printPostOrder(Student *node)
 ```
+When the input node is `null`, this function we obtain best case complexity of **O(1)**. In all other cases, this function traverses the entire tree and performs string appends. Therefore, the average and worst time complexities are **O(n)**, for **n** nodes in the tree.
 
 ```c++
     int printLevelCount(Student *node)
 ```
+This function calls `getHeight` on the root, which results in the worst case complexity of `getHeight`. Therefore, in all cases, the complexity is **O(h)**, where **h** is the height of the tree.
 
 ```c++
     void removeInOrder(Student *node, int N)
 ```
+This function calls `inOrderVector` every time. When `N` is out of range, the function throws an exception, so the best case is constant time; otherwise, `removeID` is called. On average, we assume `N` will be in range and hence, the tree will be nonempty. For **n** = nodes in tree and **h** = height of tree, we obtain a complexity of **O(n + h^2)**. But since **h** is roughly equal to **log(n)**, we have **O(n + (log(n))^2)**. Since **O((log(n))^2)** is slower than **O(n)**, we can reach these final complexities.
+
+- Best Case: **O(1)**
+- Worst Case: **O((log(n))^2)**
+- Average Case: **O((log(n))^2)**
 
 ### Part 2: Reflection
 
