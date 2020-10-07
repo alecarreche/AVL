@@ -5,6 +5,7 @@ Alec Arreche
 *Important notes:*
 - Since our AVL tree is nearly balanced, the height of the tree, **h** is roughly **log(n)**, where **n** is the number of nodes.
 - Assume the complexity of `+` operator for strings is constant.
+- Assume the complexity of `==` operator for strings is constant.
 
 **Helper Functions**
 
@@ -31,7 +32,7 @@ In all cases, this function is **O(1)**.
 ```c++
     int getHeight(Student *node)
 ```
-This function will be called recursively **h** times in all cases, where **h** represents the height of the tree. Therefore, in all cases, this function is **O(h)**.
+This function will be called recursively **n** times in all cases, where **n** represents the number of nodes in the tree. Therefore, in all cases, this function is **O(n)**.
 
 ```c++
     Student *findSuccessor(Student *node)
@@ -46,21 +47,21 @@ This function traverses the entire tree, so in all cases complexity is **O(n)**,
 ```c++
     void verifyParams(string command, string params)
 ```
-For this function, let **c** represent the number of characters in `command`, and let **p** represent the number of characters in `params`. For any `command` input, the operator `==` is called, with a time complexity of **O(c )** for strings. When `command` is not `"searchName"`, all characters of `params` are traversed to ensure there are no spaces and/or create a substring, both of which have a complexity of **O(p )**. When `command` is `"searchName"`, only two characters in `params` are accessed, which is constant time. In conclusion, we have:
+For this function, let **p** represent the number of characters in `params`. When `command` is not `"searchName"`, all characters of `params` are traversed to ensure there are no spaces and/or create a substring, both of which have a complexity of **O(p )**. When `command` is `"searchName"`, only two characters in `params` are accessed, which is constant time. In conclusion, we have:
 
-- Best Case (command = "searchName"): **O(c )**
-- Worst Case: **O(cp)**
-- Average Case: **O(cp)**
+- Best Case (command = "searchName"): **O(1 )**
+- Worst Case: **O(p)**
+- Average Case: **O(p)**
 
 **Primary Functions**
 ```c++
     Student *insert(Student *node, long ID, string name)
 ```
-Consider the complexity of normal binary search tree insertion. The best case complexity is **O(1)**, and worst and average case complexities are **O(h)**, where **h** represents the height of the tree. We can ignore the rotations in our `insert` since these are constant complexity. However,  when `node` is not null, our `insert` also calls `getHeight`, which we have shown has a complexity of **O(h)** in all cases, resulting in total complexity as:
+Consider the complexity of normal binary search tree insertion. The best case complexity is **O(1)**, and worst and average case complexities are **O(h)**, where **h** represents the height of the tree. We can ignore the rotations in our `insert` since these are constant complexity. However,  when `node` is not null, our `insert` also calls `getHeight`, which we have shown has a complexity of **O(n)** in all cases, resulting in total complexity as:
 
 - Best Case: **O(1)**
-- Worst Case: **O(h^2)**
-- Average Case: **O(h^2)**
+- Worst Case: **O(nh)**
+- Average Case: **O(nh)**
 
 ```c++
     Student *removeID(Student *node, long ID)
@@ -113,3 +114,13 @@ This function calls `inOrderVector` every time, which is linear complexity. When
 
 ### Part 2: Reflection
 
+In this assignment, I became more comfortable with implementing various functions on an AVL tree.
+Additionally, I gained a much better understanding on tree traversal and the balancing of a binary search tree.
+Lastly, I gained experience in handling user input, which although rather simple, can be very tedius with handling strings in C++.
+
+
+If I was to restart this project, I would find a way to tidy up the AVL class.
+In my implementation, the AVL class only stores the associated functions, and calling the functions feels sloppy.
+For example, if I wanted to create a new tree, I would first have to create a new `AVL` object, supposed named `avl`.
+Then, I would set a `Student` pointer to the root and to insert, I would have to call `root = avl.insert()`, which feels very sloppy.
+Ideally, the AVL class would store the root as a class property and eliminate the need to redefine `root` on most functions called.
