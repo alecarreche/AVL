@@ -101,7 +101,7 @@ This function traverses the entire tree, so in all cases complexity is **O(n)**,
 ```c++
     int printLevelCount(Student *node)
 ```
-This function calls `getHeight` on the root, which results in the worst case complexity of `getHeight`. Therefore, in all cases, the complexity is **O(h)**, where **h** is the height of the tree.
+This function calls `getHeight` on the root, which results in the worst case complexity of `getHeight`. Therefore, in all cases, the complexity is **O(n)**, where **n** is the number of nodes in the tree.
 
 ```c++
     void removeInOrder(Student *node, int N)
