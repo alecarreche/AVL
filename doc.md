@@ -115,8 +115,10 @@ This function calls `inOrderVector` every time, which is linear complexity. When
 ### Part 2: Reflection
 
 In this assignment, I became more comfortable with implementing various functions on an AVL tree.
-Additionally, I gained a much better understanding on tree traversal and the balancing of a binary search tree.
-Lastly, I gained experience in handling user input, which although rather simple, can be very tedius with handling strings in C++.
+This includes tree traversal and the balancing of a binary search tree. 
+Additionally, this has been my first project for school where I have used Git for version control. 
+I still have the same bad habits with git that I have always had, such as not committing enough, but now I have faced real consequences for this after breaking one function and having to revert a large commit resulting rewriting a lot of code, which is exactly how Git should NOT be used. 
+Lastly, I gained experience in handling user input, which although rather simple, can be very tedious with handling strings in C++.
 
 
 If I was to restart this project, I would find a way to tidy up the AVL class.
