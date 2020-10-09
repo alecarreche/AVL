@@ -47,9 +47,9 @@ This function traverses the entire tree, so in all cases complexity is **O(n)**,
 ```c++
     void verifyParams(string command, string params)
 ```
-For this function, let **p** represent the number of characters in `params`. When `command` is not `"searchName"`, all characters of `params` are traversed to ensure there are no spaces and/or create a substring, both of which have a complexity of **O(p )**. When `command` is `"searchName"`, only two characters in `params` are accessed, which is constant time. In conclusion, we have:
+For this function, let **p** represent the number of characters in `params`. In all cases, all characters of `params` are traversed to ensure there are no spaces if `params` is an ID or no numbers if `params` is a name and/or create a substring, all of which have a complexity of **O(p )**. So, we have:
 
-- Best Case (command = "searchName"): **O(1 )**
+- Best Case: **O(p)**
 - Worst Case: **O(p)**
 - Average Case: **O(p)**
 
