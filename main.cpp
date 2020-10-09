@@ -250,8 +250,10 @@ void AVL::verifyParams(string command, string params) {
         string name = params.substr(0, params.size() - 9);
         if (name[0] != '\"' || name[name.size() - 1] != '\"')
             throw invalid_argument("");
+
+        int nonAlpha = 0;
         for (auto c : name) {
-            if (isdigit(c))
+            if (!isalpha(c) && !isspace(c) && ++nonAlpha > 2)
                 throw invalid_argument("");
         }
     } else if (command == "remove" || command == "searchID") {
@@ -264,8 +266,10 @@ void AVL::verifyParams(string command, string params) {
     } else { // searchName case
         if (params[0] != '\"' || params[params.size() - 1] != '\"')
             throw invalid_argument("");
+
+        int nonAlpha = 0;
         for (auto c : params) {
-            if (isdigit(c))
+            if (!isalpha(c) && !isspace(c) && ++nonAlpha > 2)
                 throw invalid_argument("");
         }
     }
